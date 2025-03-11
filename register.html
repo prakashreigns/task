@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Form</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body { font-family: 'Times New Roman', Times, serif; color: #de1b1b; }
+        .login-box { margin-top: 100px; background-color: rgba(255, 255, 255, 0.9); padding: 40px 30px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); }
+        .login-box h2 { margin-bottom: 20px; font-weight: 600; color: #333; }
+        button { background-color: #de1b1b; color: white; border: none; height: 40px; width: 100%; border-radius: 5px; }
+        button:hover { background-color: #a81e1e; }
+    </style>
+</head>
+<body>
+    <center>
+        <div style="width: 25%; margin-top: 25px; border-radius: 10px; border: 2px solid #de1b1b;">
+            <div style="display: flex; width: 100%; height: 60px; border-radius: 10px">
+                             
+                <h2 style="margin-left: 80px; margin-top: 20px;"><b>Register</b></h2><br>
+            </div>
+            <form id="registerForm" style="margin-top: 10px;"> 
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" class="form-control" placeholder="Enter your username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" class="form-control" placeholder="Enter your password" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" class="form-control" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label>Gender</label><br>
+                    <input type="radio" id="male" name="gender" value="Male"> <label for="male">Male</label>
+                    <input type="radio" id="female" name="gender" value="Female" style="margin-left: 15px;"> <label for="female">Female</label>
+                </div>               
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="terms" required>
+                    <label for="terms" class="form-check-label">*Accept the terms and conditions</label>
+                </div>
+                <br>
+                <button type="submit">Register</button>
+                <br><br>
+            </form>
+        </div>
+    </center>
+
+    <script>
+          document.getElementById("registerForm").addEventListener("submit", async function(event) {
+            event.preventDefault(); 
+            
+            const username = document.getElementById("username").value.trim();
+            const password = document.getElementById("password").value.trim();
+            const email = document.getElementById("email").value.trim();
+            const gender = document.querySelector('input[name="gender"]:checked')?.value;
+
+            if (!username || !password || !email || !gender) {
+                alert("Please fill in all fields.");
+                return;
+            }
+
+            try {
+                const response = await fetch('http://localhost:5000/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password, email, gender })
+                });
+
+                const data = await response.json();
+                alert(data.message);
+
+                if (response.ok) window.location.href = "login.html"; 
+            } catch (error) {
+                alert("Error connecting to server.");
+            }
+        });
+    </script>
+    
+</body>
+</html>
